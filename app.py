@@ -7,7 +7,7 @@
 
 import streamlit as st
 from datetime import datetime
-from gemini_client import GeminiClient
+from groq_client import GroqClient
 
 # ── Page config (MUST be first Streamlit call) ────────────────
 st.set_page_config(
