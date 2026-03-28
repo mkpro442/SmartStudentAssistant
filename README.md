@@ -1,11 +1,11 @@
-# 🎓 Smart Student Chatbot — Gemini + Streamlit
+# Smart Student Chatbot — Gemini + Streamlit
 
 A fully online student chatbot powered by **Google Gemini 1.5 Flash** (free API)
 and deployed on **Streamlit Cloud** (free hosting).
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 student_chatbot_gemini/
@@ -21,7 +21,7 @@ student_chatbot_gemini/
 
 ---
 
-## ⚙️ Part 1 — Get Your Free Gemini API Key
+## Part 1 — Get Your Free Gemini API Key
 
 1. Go to **https://aistudio.google.com/apikey**
 2. Sign in with your Google account
@@ -30,13 +30,13 @@ student_chatbot_gemini/
 5. Keep it safe — treat it like a password!
 
 **Free tier limits:**
-- ✅ 15 requests per minute
-- ✅ 1 million tokens per day
-- ✅ No credit card required
+-  15 requests per minute
+-  1 million tokens per day
+-  No credit card required
 
 ---
 
-## 💻 Part 2 — Run Locally
+## Part 2 — Run Locally
 
 ```bash
 # 1. Install dependencies
@@ -57,7 +57,7 @@ Your browser will open at **http://localhost:8501** automatically.
 
 ---
 
-## 🚀 Part 3 — Deploy Online with Streamlit Cloud
+## Part 3 — Deploy Online with Streamlit Cloud
 
 ### Step 1 — Push your code to GitHub
 
@@ -72,7 +72,7 @@ git remote add origin https://github.com/YOUR_USERNAME/student-chatbot.git
 git push -u origin main
 ```
 
-> ⚠️ Make sure `.streamlit/secrets.toml` is in `.gitignore` so your key
+> Make sure `.streamlit/secrets.toml` is in `.gitignore` so your key
 > is never uploaded to GitHub!
 
 ### Step 2 — Connect to Streamlit Cloud
@@ -97,7 +97,7 @@ Your app is now **live at a public URL** like:
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 ```
 User types a message
@@ -118,23 +118,7 @@ User types a message
   Streamlit re-renders the chat with the new bubble
 ```
 
----
-
-## 🔑 Key Concepts for Viva
-
-| Concept | Where it's used |
-|---|---|
-| **LLM API** | `gemini_client.py` — calling Gemini via REST |
-| **System prompt** | `SYSTEM_PROMPT` in `gemini_client.py` — controls personality |
-| **Multi-turn conversation** | `history` list passed to every API call |
-| **Session state** | `st.session_state` — persists data across reruns |
-| **Secrets management** | `.streamlit/secrets.toml` + Streamlit Cloud secrets |
-| **Streamlit deployment** | GitHub → Streamlit Cloud pipeline |
-| **Error handling** | Rate limits, invalid keys, safety filters |
-
----
-
-## ✏️ How to Customise
+## How to Customise
 
 **Change the personality** → Edit `SYSTEM_PROMPT` in `gemini_client.py`
 
