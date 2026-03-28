@@ -1,5 +1,5 @@
 # =============================================================
-#  app.py  —  Smart Student Chatbot  (Streamlit + Gemini)
+#  app.py  —  Smart Student Chatbot  (Streamlit + Groq)
 # =============================================================
 #  Local run:   streamlit run app.py
 #  Deploy:      Push to GitHub → connect on share.streamlit.io
@@ -85,7 +85,7 @@ def init_state():
     if "messages" not in st.session_state:
         st.session_state.messages = []       # displayed messages {role, content, time}
     if "history" not in st.session_state:
-        st.session_state.history  = []       # Gemini API history {role, parts}
+        st.session_state.history  = []       # Groq API history {role, text}
     if "client" not in st.session_state:
         st.session_state.client   = None
     if "api_key" not in st.session_state:
@@ -103,7 +103,7 @@ init_state()
 # =============================================================
 with st.sidebar:
     st.markdown("## 🎓 Student Chatbot")
-    st.markdown("Powered by **Gemini 2.0 Flash** · Free tier")
+    st.markdown("Powered by **Llama 3.3 70B (Groq)** · Free tier")
     st.divider()
 
     # ── API Key input ──────────────────────────────────────────
@@ -112,7 +112,7 @@ with st.sidebar:
     # Try Streamlit Cloud secrets first (for deployed app)
     cloud_key = ""
     try:
-        cloud_key = st.secrets["GEMINI_API_KEY"]
+        cloud_key = st.secrets["GROQ_API_KEY"]
     except Exception:
         pass
 
@@ -121,23 +121,23 @@ with st.sidebar:
         active_key = cloud_key
     else:
         api_input = st.text_input(
-            "Enter your Gemini API key",
+            "Enter your Groq API key",
             type="password",
-            placeholder="AIza...",
-            help="Get a free key at https://aistudio.google.com/apikey",
+            placeholder="gsk_...",
+            help="Get a free key at https://console.groq.com",
         )
         if api_input:
             st.session_state.api_key = api_input
         active_key = st.session_state.api_key
 
         if not active_key:
-            st.info("👆 Add your free Gemini API key above to start chatting.\n\n"
-                    "Get one free at [aistudio.google.com](https://aistudio.google.com/apikey)")
+            st.info("👆 Add your free Groq API key above to start chatting.\n\n"
+                    "Get one free at [console.groq.com](https://console.groq.com)")
 
     # Create / update client when key is available
     if active_key:
         if st.session_state.client is None:
-            with st.spinner("Connecting to Gemini…"):
+            with st.spinner("Connecting to Groq…"):
                 st.session_state.client = GeminiClient(api_key=active_key)
             st.success("✅ Connected!")
 
@@ -178,7 +178,7 @@ with st.sidebar:
 
     # ── Get API key link ──────────────────────────────────────
     st.markdown(
-        "🔗 [Get free Gemini API key](https://aistudio.google.com/apikey)",
+        "🔗 [Get free Groq API key](https://console.groq.com)",
         unsafe_allow_html=False
     )
 
@@ -220,7 +220,7 @@ for msg in st.session_state.messages:
 if not st.session_state.messages and st.session_state.client:
     with st.chat_message("assistant", avatar="🤖"):
         st.markdown(
-            "👋 Hello! I'm your **Smart Student Assistant**, powered by Google Gemini.\n\n"
+            "👋 Hello! I'm your **Smart Student Assistant**, powered by Groq & Llama 3.3.\n\n"
             "I can help you with studying, exams, time management, motivation, "
             "coding, career advice, and a lot more! What's on your mind today? 😊"
         )
@@ -230,9 +230,9 @@ if not st.session_state.messages and st.session_state.client:
 #  Handle input  (both text box and chip clicks)
 # =============================================================
 def handle_message(user_input: str):
-    """Process a user message: display it, call Gemini, display reply."""
+    """Process a user message: display it, call Groq, display reply."""
     if not st.session_state.client:
-        st.error("⚠️ Please enter your Gemini API key in the sidebar first!")
+        st.error("⚠️ Please enter your Groq API key in the sidebar first!")
         return
 
     timestamp = datetime.now().strftime("%I:%M %p")
@@ -247,7 +247,7 @@ def handle_message(user_input: str):
         st.markdown(user_input)
         st.caption(f"*{timestamp}*")
 
-    # ── Call Gemini ────────────────────────────────────────────
+    # ── Call Groq ──────────────────────────────────────────────
     with st.chat_message("assistant", avatar="🤖"):
         with st.spinner("Thinking…"):
             reply = st.session_state.client.chat(
@@ -258,13 +258,13 @@ def handle_message(user_input: str):
         reply_time = datetime.now().strftime("%I:%M %p")
         st.caption(f"*{reply_time}*")
 
-    # ── Update Gemini history (multi-turn memory) ──────────────
+    # ── Update Groq history (multi-turn memory) ────────────────
     st.session_state.history.append(
         {"role": "user",  "text": user_input}
-        )
+    )
     st.session_state.history.append(
         {"role": "model", "text": reply}
-        )
+    )
 
     # ── Save to displayed messages ────────────────────────────
     st.session_state.messages.append({
@@ -293,4 +293,4 @@ if user_text:
 
 # ── Prompt when no API key ────────────────────────────────────
 if st.session_state.client is None:
-    st.warning("👈 Add your **free Gemini API key** in the sidebar to start chatting!")
+    st.warning("👈 Add your **free Groq API key** in the sidebar to start chatting!")
